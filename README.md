@@ -91,14 +91,19 @@ kubectl apply -f k8s/deployment.yaml
 The application is now fully deployed and the stages can be verified.
 
 ✅ Public Cloud & Index Page: PASS. The application is accessible at its external IP and returns the secret word.
+http://34.63.99.52/
 
 ✅ Secret Word Check: PASS. The /secret_word endpoint successfully returns the injected secret.
+http://34.63.99.52/secret_word
 
 ⚠️ Docker Check: FAIL. The test returns a failure message. This is expected behavior because GKE Autopilot uses the containerd runtime, not Docker, to run containers. The application is correctly containerized; the test is simply not designed for modern container orchestrators.
+http://34.63.99.52/docker
 
 ⚠️ Load Balancer Check: FAIL. The test returns a failure message. This is expected behavior because the Kubernetes Service of type LoadBalancer provisions a Layer 4 (Network) Load Balancer. The test is specifically looking for HTTP headers (e.g., X-Forwarded-For) that are only injected by a Layer 7 (Application) Load Balancer, which would be provisioned by a Kubernetes Ingress.
+http://34.63.99.52/loadbalanced
 
 ⚠️ TLS Check: FAIL. The test correctly identifies that the connection is over http, not https. This would be resolved by implementing a GKE Ingress, as described below.
+http://34.63.99.52/tls
 
 ## 5. Given More Time, I Would Improve...
 This solution provides a solid foundation. For a production environment, I would implement the following improvements:
