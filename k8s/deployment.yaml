@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-quest-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cloud-quest
+  template:
+    metadata:
+      labels:
+        app: cloud-quest
+    spec:
+      containers:
+      - name: cloud-quest-app
+        image: us-central1-docker.pkg.dev/ac-2025-8-15/cloud-quest-gke-repo/cloud-quest-app:v3
+        ports:
+        # Correct port
+        - containerPort: 3000
+        # The env section for the secret word remains the same
+        env:
+        - name: SECRET_WORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: secret-word
